@@ -6,11 +6,11 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:11:45 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/01 18:25:32 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/02 16:33:41 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/so_long.h"
+#include "so_long.h"
 
 static int	validate_args(int argc, char **argv)
 {

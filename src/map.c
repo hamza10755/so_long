@@ -6,11 +6,11 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:12:05 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/01 18:00:35 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/02 16:37:52 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/so_long.h"
+#include "so_long.h"
 
 static int	get_map_dimensions(char *file, t_game *game)
 {
@@ -56,11 +56,13 @@ int	read_map(t_game *game, char *file)
 	if (fd < 0)
 		return (0);
 	i = 0;
-	while ((line = get_next_line(fd)))
+	line = get_next_line(fd);
+	while (line)
 	{
 		if (line[ft_strlen(line) - 1] == '\n')
 			line[ft_strlen(line) - 1] = '\0';
 		game->map->array[i++] = line;
+		line = get_next_line(fd);
 	}
 	game->map->array[i] = NULL;
 	close(fd);

@@ -6,7 +6,7 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:05:02 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/01 18:14:30 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/02 16:41:01 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ typedef struct s_game
 	int			total_collectibles;
 	int			collectibles_left;
 	int			player_position;
+	int			player_count;
+	int			exit_count;
 	int			moves;
 	void		*mlx;
 	void		*window;
@@ -68,7 +70,7 @@ typedef struct s_game
 
 void			init_game(t_game *game);
 int				init_window(t_game *game);
-t_images		*load_images(t_game *game);
+int				load_images(t_game *game);
 void			put_image(t_game *game, void *img, int x, int y);
 
 int				read_map(t_game *game, char *file);

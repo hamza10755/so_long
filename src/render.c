@@ -6,26 +6,29 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:15:18 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/01 18:30:01 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/02 16:19:59 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/so_long.h"
+#include "so_long.h"
 
- void	put_image(t_game *game, void *img, int x, int y)
+void	put_image(t_game *game, void *img, int x, int y)
 {
 	mlx_put_image_to_window(game->mlx, game->window, img, x * TILE_SIZE, y
 		* TILE_SIZE);
 }
 
-void	render_map(t_game *game) {
+void	render_map(t_game *game)
+{
 	int	x;
 	int	y;
 
 	y = 0;
-	while (y < game->map->height) {
+	while (y < game->map->height)
+	{
 		x = 0;
-		while (x < game->map->width) {
+		while (x < game->map->width)
+		{
 			if (game->map->array[y][x] == '0')
 				put_image(game, game->images->floor, x, y);
 			else if (game->map->array[y][x] == '1')
@@ -38,5 +41,5 @@ void	render_map(t_game *game) {
 		}
 		y++;
 	}
-	put_image(game, game->images->player, game->player->x, game->player->y); 
+	put_image(game, game->images->player, game->player->x, game->player->y);
 }

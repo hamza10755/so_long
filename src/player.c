@@ -6,11 +6,11 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:15:02 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/01 17:59:01 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/02 16:19:50 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/so_long.h"
+#include "so_long.h"
 
 static int	is_valid_move(t_game *game, int new_x, int new_y)
 {
@@ -31,19 +31,18 @@ static int	check_win(t_game *game)
 	return (0);
 }
 
-
-void	update_player_position(t_game *game, int new_x, int new_y) {
-	if (game->map->array[game->player->y][game->player->x] == 'C') {
+void	update_player_position(t_game *game, int new_x, int new_y)
+{
+	if (game->map->array[game->player->y][game->player->x] == 'C')
+	{
 		game->collectibles_left--;
 		game->map->array[game->player->y][game->player->x] = '0';
 	}
 	put_image(game, game->images->floor, game->player->x, game->player->y);
-
 	game->player->x = new_x;
 	game->player->y = new_y;
 	game->moves++;
 	printf("Moves: %d\n", game->moves);
-
 	render_map(game);
 	put_image(game, game->images->player, game->player->x, game->player->y);
 	check_win(game);

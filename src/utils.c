@@ -6,7 +6,7 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:15:50 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/01 18:22:55 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/02 16:35:57 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,24 @@ void	cleanup_images(t_game *game)
 
 void	cleanup_game(t_game *game)
 {
-	if (game->window)
-		mlx_destroy_window(game->mlx, game->window);
-	if (game->mlx)
+	if (game)
 	{
-		mlx_destroy_display(game->mlx);
-		free(game->mlx);
+		if (game->images)
+			cleanup_images(game);
+		if (game->window)
+			mlx_destroy_window(game->mlx, game->window);
+		if (game->mlx)
+		{
+			mlx_destroy_display(game->mlx);
+			free(game->mlx);
+		}
+		if (game->map)
+		{
+			free_map(game);
+		}
+		if (game->player)
+			free(game->player);
 	}
-	if (game->map)
-	{
-		free_map(game);
-		free(game->map);
-	}
-	if (game->player)
-		free(game->player);
 }
 
 int	exit_game(t_game *game)
