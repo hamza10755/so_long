@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hamzabillah <hamzabillah@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:15:02 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/02 16:19:50 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/02 20:14:56 by hamzabillah      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	check_win(t_game *game)
 	if (game->collectibles_left == 0
 		&& game->map->array[game->player->y][game->player->x] == 'E')
 	{
-		printf("\nCongratulations! You won in %d moves!\n", game->moves);
+		ft_printf("\nCongratulations! You won in %d moves!\n", game->moves);
 		exit_game(game);
 		return (1);
 	}
@@ -42,7 +42,7 @@ void	update_player_position(t_game *game, int new_x, int new_y)
 	game->player->x = new_x;
 	game->player->y = new_y;
 	game->moves++;
-	printf("Moves: %d\n", game->moves);
+	ft_printf("Moves: %d\n", game->moves);
 	render_map(game);
 	put_image(game, game->images->player, game->player->x, game->player->y);
 	check_win(game);
