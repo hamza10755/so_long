@@ -6,73 +6,82 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:15:50 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/02 16:35:57 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/05 16:58:00 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/so_long.h"
 
-void	free_map(t_game *game)
+void free_map(t_game *game)
 {
-	int	i;
+    int i;
 
-	if (game->map->array)
-	{
-		i = 0;
-		while (game->map->array[i])
-		{
-			free(game->map->array[i]);
-			i++;
-		}
-		free(game->map->array);
-		free(game->map);
-	}
+    if (!game || !game->map)
+        return;
+
+    if (game->map->array)
+    {
+        i = 0;
+        while (i < game->map->height && game->map->array[i])
+        {
+            free(game->map->array[i]);
+            i++;
+        }
+        free(game->map->array);
+        game->map->array = NULL;
+    }
+    free(game->map);
 }
 
-void	cleanup_images(t_game *game)
+static void destroy_image(void *mlx, void **img)
 {
-	if (game->images)
-	{
-		if (game->images->wall)
-			mlx_destroy_image(game->mlx, game->images->wall);
-		if (game->images->player)
-			mlx_destroy_image(game->mlx, game->images->player);
-		if (game->images->collectible)
-			mlx_destroy_image(game->mlx, game->images->collectible);
-		if (game->images->exit)
-			mlx_destroy_image(game->mlx, game->images->exit);
-		if (game->images->floor)
-			mlx_destroy_image(game->mlx, game->images->floor);
-		free(game->images);
-	}
+    if (*img)
+    {
+        mlx_destroy_image(mlx, *img);
+        *img = NULL;
+    }
 }
 
-void	cleanup_game(t_game *game)
+void cleanup_images(t_game *game)
 {
-	if (game)
-	{
-		if (game->images)
-			cleanup_images(game);
-		if (game->window)
-			mlx_destroy_window(game->mlx, game->window);
-		if (game->mlx)
-		{
-			mlx_destroy_display(game->mlx);
-			free(game->mlx);
-		}
-		if (game->map)
-		{
-			free_map(game);
-		}
-		if (game->player)
-			free(game->player);
-	}
+    if (!game || !game->mlx || !game->images)
+        return;
+    destroy_image(game->mlx, (void **)&game->images->wall);
+    destroy_image(game->mlx, (void **)&game->images->player);
+    destroy_image(game->mlx, (void **)&game->images->collectible);
+    destroy_image(game->mlx, (void **)&game->images->exit);
+    destroy_image(game->mlx, (void **)&game->images->floor);
 }
 
-int	exit_game(t_game *game)
+void cleanup_game(t_game *game)
 {
-	cleanup_game(game);
-	free(game);
-	exit(0);
-	return (0);
+    if (!game)
+        return;
+    if (game->images)
+    {
+        cleanup_images(game);
+        free(game->images);
+        game->images = NULL;
+    }
+    if (game->window && game->mlx)
+        mlx_destroy_window(game->mlx, game->window);
+    if (game->mlx)
+    {
+        mlx_destroy_display(game->mlx);
+        free(game->mlx);
+    }
+    free_map(game);
+    free(game->player);
+}
+
+
+int exit_game(t_game *game)
+{
+    if (game)
+    {
+        cleanup_game(game);
+        free(game);
+    }
+    exit(0);
+    return (0);
 }
