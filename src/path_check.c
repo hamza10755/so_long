@@ -6,7 +6,7 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:14:36 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/02 16:35:31 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/06 14:23:20 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,69 +40,38 @@ static char	**copy_map(t_game *game)
 	return (copy);
 }
 
-static void	flood_fill(char **map, int x, int y, int *collectibles)
+static void	flood_fill(char **map, int x, int y, t_game *game)
 {
 	if (y < 0 || x < 0 || map[y] == NULL || map[y][x] == '1'
 		|| map[y][x] == 'F')
 		return ;
 	if (map[y][x] == 'C')
-		(*collectibles)--;
+		game->collectibles_left--;
+	if (map[y][x] == 'E')
+		game->map->exit_path = 1;
 	map[y][x] = 'F';
-	flood_fill(map, x + 1, y, collectibles);
-	flood_fill(map, x - 1, y, collectibles);
-	flood_fill(map, x, y + 1, collectibles);
-	flood_fill(map, x, y - 1, collectibles);
-}
-
-int	check_exit_reachability(char **map_copy, t_game *game)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < game->map->height)
-	{
-		j = 0;
-		while (j < game->map->width)
-		{
-			if (map_copy[i][j] == 'E')
-			{
-				if ((i > 0 && map_copy[i - 1][j] == 'F')
-					|| (i < game->map->height - 1 && map_copy[i + 1][j] == 'F')
-					|| (j > 0 && map_copy[i][j - 1] == 'F')
-					|| (j < game->map->width - 1 && map_copy[i][j + 1] == 'F'))
-				{
-					return (1);
-				}
-			}
-			j++;
-		}
-		i++;
-	}
-	return (0);
+	flood_fill(map, x + 1, y, game);
+	flood_fill(map, x - 1, y, game);
+	flood_fill(map, x, y + 1, game);
+	flood_fill(map, x, y - 1, game);
 }
 
 int	check_path(t_game *game)
 {
 	char	**map_copy;
-	int		collectibles;
-	int		exit_found;
 	int		i;
 
 	i = 0;
 	map_copy = copy_map(game);
 	if (!map_copy)
 		return (0);
-	collectibles = game->total_collectibles;
-	flood_fill(map_copy, game->player->x, game->player->y, &collectibles);
-	exit_found = check_exit_reachability(map_copy, game);
+	game->map->exit_path = 0;
+	game->collectibles_left = game->total_collectibles;
+	flood_fill(map_copy, game->player->x, game->player->y, game);
 	while (i < game->map->height)
-	{
-		free(map_copy[i]);
-		i++;
-	}
+		free(map_copy[i++]);
 	free(map_copy);
-	if (exit_found || collectibles > 0)
+	if (!game->map->exit_path || game->collectibles_left > 0)
 	{
 		ft_printf("Error\nNo valid path to exit\n");
 		return (0);

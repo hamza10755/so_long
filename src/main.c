@@ -6,7 +6,7 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:11:45 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/05 16:59:42 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/06 14:12:21 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	check_name(char *name)
 
 static int	validate_args(int argc, char **argv)
 {
-	int fd;
+	int	fd;
 
 	if (argc != 2)
 	{
@@ -61,10 +61,10 @@ static int	setup_game(t_game *game, char *map_file)
 {
 	init_game(game);
 	if (!read_map(game, map_file))
-		{
-			cleanup_game(game);
-			return (0);
-		}
+	{
+		cleanup_game(game);
+		return (0);
+	}
 	if (!validate_map(game) || !check_path(game))
 	{
 		cleanup_game(game);
@@ -87,17 +87,17 @@ int	key_hook_wrapper(int key, void *param)
 int	main(int argc, char **argv)
 {
 	t_game	*game;
-	
+
 	if (!validate_args(argc, argv))
 		return (1);
 	game = malloc(sizeof(t_game));
 	if (!game)
 		return (1);
 	if (!setup_game(game, argv[1]))
-		{
-			free(game);
-			return (1);
-		}
+	{
+		free(game);
+		return (1);
+	}
 	mlx_hook(game->window, 17, 0, exit_game, game);
 	mlx_key_hook(game->window, key_hook_wrapper, game);
 	mlx_loop(game->mlx);
