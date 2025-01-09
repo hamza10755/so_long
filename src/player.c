@@ -6,7 +6,7 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:15:02 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/06 14:12:23 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/09 16:34:28 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ static int	is_valid_move(t_game *game, int new_x, int new_y)
 
 static int	check_win(t_game *game)
 {
+	ft_printf("Checking win condition... collectibles_left: %d\n",
+		game->collectibles_left);
 	if (game->collectibles_left == 0
 		&& game->map->array[game->player->y][game->player->x] == 'E')
 	{
@@ -36,6 +38,8 @@ void	update_player_position(t_game *game, int new_x, int new_y)
 	if (game->map->array[game->player->y][game->player->x] == 'C')
 	{
 		game->collectibles_left--;
+		ft_printf("Collected collectible. Remaining: %d\n",
+			game->collectibles_left);
 		game->map->array[game->player->y][game->player->x] = '0';
 	}
 	put_image(game, game->images->floor, game->player->x, game->player->y);

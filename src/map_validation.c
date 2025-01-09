@@ -6,7 +6,7 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:13:57 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/06 14:12:21 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/09 16:34:16 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,10 @@ static int	check_cell(t_game *game, int i, int j)
 	else if (game->map->array[i][j] == 'E')
 		game->exit_count++;
 	else if (game->map->array[i][j] == 'C')
+	{
 		game->total_collectibles++;
+		game->collectibles_left++;
+	}
 	else if (game->map->array[i][j] != '0' && game->map->array[i][j] != '1')
 		return (0);
 	return (1);
@@ -75,6 +78,7 @@ static int	check_characters(t_game *game)
 	game->player_count = 0;
 	game->exit_count = 0;
 	game->total_collectibles = 0;
+	game->collectibles_left = 0;
 	i = -1;
 	while (++i < game->map->height)
 	{
@@ -85,7 +89,6 @@ static int	check_characters(t_game *game)
 				return (0);
 		}
 	}
-	game->collectibles_left = game->total_collectibles;
 	return (game->player_count == 1 && game->exit_count == 1
 		&& game->total_collectibles > 0);
 }

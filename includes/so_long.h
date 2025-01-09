@@ -6,7 +6,7 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:05:02 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/06 14:12:13 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/06 18:31:49 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,6 @@ void			free_map(t_game *game);
 void			cleanup_game(t_game *game);
 int				exit_game(t_game *game);
 void			cleanup_images(t_game *game);
+void			count_collectables(t_game *game);
 
 #endif

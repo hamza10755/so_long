@@ -6,7 +6,7 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:11:45 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/06 14:12:21 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/09 16:34:05 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	check_name(char *name)
 
 	if (ft_strlen(name) < 4)
 	{
-		write(2, "Error\nmap must name .ber\n", 25);
+		ft_printf("Error\nmap must name .ber\n");
 		exit(1);
 	}
 	i = 0;
@@ -32,7 +32,7 @@ static void	check_name(char *name)
 	{
 		if (ber[j--] != name[--i])
 		{
-			write(2, "Error\nmap must be name .ber\n", 28);
+			ft_printf("Error\nmap must be name .ber\n");
 			exit(1);
 		}
 	}

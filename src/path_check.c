@@ -6,7 +6,7 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:14:36 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/06 14:23:20 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/09 16:37:01 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,14 @@ int	check_path(t_game *game)
 {
 	char	**map_copy;
 	int		i;
+	int		original_collectibles;
 
 	i = 0;
 	map_copy = copy_map(game);
 	if (!map_copy)
 		return (0);
 	game->map->exit_path = 0;
-	game->collectibles_left = game->total_collectibles;
+	original_collectibles = game->collectibles_left;
 	flood_fill(map_copy, game->player->x, game->player->y, game);
 	while (i < game->map->height)
 		free(map_copy[i++]);
@@ -76,5 +77,6 @@ int	check_path(t_game *game)
 		ft_printf("Error\nNo valid path to exit\n");
 		return (0);
 	}
+	game->collectibles_left = original_collectibles;
 	return (1);
 }
