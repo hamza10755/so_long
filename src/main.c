@@ -6,7 +6,7 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:11:45 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/09 16:34:05 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/13 17:15:00 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static int	validate_args(int argc, char **argv)
 		ft_printf("File does not exist, or can not read it\n");
 		return (0);
 	}
+	close(fd);
 	check_name(argv[1]);
 	return (1);
 }
@@ -91,6 +92,8 @@ int	main(int argc, char **argv)
 	if (!validate_args(argc, argv))
 		return (1);
 	game = malloc(sizeof(t_game));
+	if (!game)
+		return (0);
 	if (!game)
 		return (1);
 	if (!setup_game(game, argv[1]))

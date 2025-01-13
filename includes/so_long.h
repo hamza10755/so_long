@@ -6,7 +6,7 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:05:02 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/06 18:31:49 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/01/13 17:01:44 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ typedef struct s_game
 	void		*window;
 }				t_game;
 
-void			init_game(t_game *game);
+int			init_game(t_game *game);
 int				init_window(t_game *game);
-int				load_images(t_game *game);
+void				load_images(t_game *game);
 void			put_image(t_game *game, void *img, int x, int y);
 
 int				read_map(t_game *game, char *file);
