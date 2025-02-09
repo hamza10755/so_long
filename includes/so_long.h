@@ -68,9 +68,9 @@ typedef struct s_game
 	void		*window;
 }				t_game;
 
-int			init_game(t_game *game);
+int				init_game(t_game *game);
 int				init_window(t_game *game);
-void				load_images(t_game *game);
+void			load_images(t_game *game);
 void			put_image(t_game *game, void *img, int x, int y);
 
 int				read_map(t_game *game, char *file);

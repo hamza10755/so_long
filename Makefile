@@ -1,40 +1,43 @@
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -Iincludes
-
-LIBDIR = libft
-LIB = $(LIBDIR)/libft.a
-
-SRC = init.c main.c map.c map_validation.c path_check.c player.c render.c utils.c
-
-SRCS :=  $(addprefix src/,$(SRC))
-OFILES := $(addprefix ofiles/,$(SRC:.c=.o))
-
 NAME = so_long
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -I includes
 
+SRC = src
+LIBFTDIR = libft
 
-ofiles/%.o: src/%.c includes/so_long.h | dirs
-	$(CC) $(CFLAGS) -c $< -o $@
+SRCS = main.c \
+       init.c \
+       map_validation.c \
+       map.c \
+       path_check.c \
+       player.c \
+       render.c \
+       utils.c
 
-all: dirs $(NAME)
+SRC_FILES = $(addprefix $(SRC)/, $(SRCS))
+OFILES = $(SRCS:.c=.o)
 
-$(NAME): $(OFILES) $(LIB)
-	@$(CC) $(OFILES) -L$(LIBDIR) -lft -lmlx \
-	-lXext -lX11 -lm -o $(NAME)
+LIBFT = $(LIBFTDIR)/libft.a
 
-$(LIB):
-	make -C $(LIBDIR)
+all: $(NAME)
+
+%.o: $(SRC)/%.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(NAME): $(OFILES) $(LIBFT)
+	@$(CC) $(OFILES) -L$(LIBFTDIR) -lft -lmlx -lXext -lX11 -lm -o $(NAME)
+
+$(LIBFT):
+	@make -C $(LIBFTDIR)
 
 clean:
-	rm -rf ofiles
-	make clean -C $(LIBDIR)
+	@rm -f $(OFILES)
+	@make -C $(LIBFTDIR) clean
 
 fclean: clean
-	make fclean -C $(LIBDIR)
-	rm -rf $(NAME)
+	@rm -f $(NAME)
+	@make -C $(LIBFTDIR) fclean
 
 re: fclean all
 
-dirs:
-	@mkdir -p ofiles
-
-.PHONY: dirs all clean fclean re
+.PHONY: all clean
