@@ -1,6 +1,6 @@
 NAME = so_long
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I includes
+CFLAGS = -Wall -Wextra -Werror -I includes -g
 
 SRC = src
 LIBFTDIR = libft

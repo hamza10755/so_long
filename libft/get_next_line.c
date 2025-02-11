@@ -6,109 +6,114 @@
 /*   By: hbelaih <hbelaih@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:22:53 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/01/06 13:33:00 by hbelaih          ###   ########.fr       */
+/*   Updated: 2025/02/11 13:08:52 by hbelaih          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_line_allocation(int fd, char *str)
+static void	*ft_free_buffers(char **global_buffer, char *read_buffer)
 {
-	char	*buff;
-	ssize_t	size;
-	char	*temp;
-
-	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buff)
-		return (NULL);
-	while (!ft_strchr(str, '\n'))
+	if (global_buffer && *global_buffer)
 	{
-		size = read(fd, buff, BUFFER_SIZE);
-		if (size == -1)
-			return (free(buff), free(str), NULL);
-		if (size == 0 && !str[0])
-			return (free(buff), free(str), NULL);
-		if (size == 0)
+		free(*global_buffer);
+		*global_buffer = NULL;
+	}
+	if (read_buffer)
+		free(read_buffer);
+	return (NULL);
+}
+
+static char	*ft_strncpy(char *dest, char *src, unsigned int n)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < n && src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	while (i < n)
+	{
+		dest[i] = '\0';
+		i++;
+	}
+	return (dest);
+}
+
+static char	*ft_read_into_buffer(char **global_buffer, int fd)
+{
+	int		read_value;
+	char	*read_buffer;
+	char	*temp_buffer;
+
+	read_buffer = malloc(BUFFER_SIZE + 1);
+	if (!read_buffer)
+		return (ft_free_buffers(global_buffer, NULL));
+	while (!ft_strchr(*global_buffer, '\n'))
+	{
+		read_value = read(fd, read_buffer, BUFFER_SIZE);
+		if (read_value == -1)
+			return (ft_free_buffers(global_buffer, read_buffer));
+		if (**global_buffer == '\0' && read_value == 0)
+			return (ft_free_buffers(NULL, read_buffer));
+		if (read_value == 0)
 			break ;
-		buff[size] = '\0';
-		temp = ft_strjoin(str, buff);
-		free(str);
-		str = temp;
+		read_buffer[read_value] = '\0';
+		temp_buffer = ft_strjoin(*global_buffer, read_buffer);
+		if (!temp_buffer)
+			return (ft_free_buffers(global_buffer, read_buffer));
+		free(*global_buffer);
+		*global_buffer = temp_buffer;
 	}
-	free(buff);
-	return (str);
+	free(read_buffer);
+	return (*global_buffer);
 }
 
-char	*ft_next_line(char *str)
+static char	*ft_extract_line(char **global_buffer)
 {
-	size_t	i;
-	char	*line;
+	char	*pos;
+	char	*str;
+	int		offset;
+	char	*temp_global_buffer;
 
-	i = 0;
+	pos = ft_strchr(*global_buffer, '\n');
+	if (pos)
+		offset = pos - *global_buffer + 1;
+	else
+		offset = ft_strlen(*global_buffer);
+	str = malloc(offset + 1);
 	if (!str)
-		return (NULL);
-	while (str[i] && str[i] != '\n')
-		i++;
-	line = malloc(sizeof(char) * (i + 1 + !!str[i]));
-	if (!line)
-		return (NULL);
-	i = 0;
-	while (str[i] && str[i] != '\n')
-	{
-		line[i] = str[i];
-		i++;
-	}
-	if (str[i] == '\n')
-	{
-		line[i] = '\n';
-		i++;
-	}
-	line[i] = '\0';
-	return (line);
-}
-
-char	*ft_rem_line(char *str)
-{
-	size_t	i;
-	size_t	j;
-	char	*new_str;
-
-	i = 0;
-	j = 0;
-	while (str[i] && str[i] != '\n')
-		i++;
-	if (!str[i])
+		return (ft_free_buffers(global_buffer, NULL));
+	ft_strncpy(str, *global_buffer, offset);
+	str[offset] = '\0';
+	temp_global_buffer = ft_strdup(*global_buffer + offset);
+	if (!temp_global_buffer)
 	{
 		free(str);
-		return (NULL);
+		return (ft_free_buffers(global_buffer, NULL));
 	}
-	new_str = malloc(sizeof(char) * (ft_strlen(str) - i));
-	if (!new_str)
-		return (NULL);
-	i++;
-	while (str[i])
-	{
-		new_str[j] = str[i];
-		i++;
-		j++;
-	}
-	new_str[j] = '\0';
-	return (free(str), new_str);
+	free(*global_buffer);
+	*global_buffer = temp_global_buffer;
+	return (str);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*line;
-	static char	*str;
+	static char	*global_buffer = NULL;
+	char		*str;
 
-	if (BUFFER_SIZE <= 0 || fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!str)
-		str = ft_strdup("");
-	str = ft_line_allocation(fd, str);
-	if (!str)
-		return (NULL);
-	line = ft_next_line(str);
-	str = ft_rem_line(str);
-	return (line);
+	if (!global_buffer)
+	{
+		global_buffer = ft_strdup("");
+		if (!global_buffer)
+			return (NULL);
+	}
+	if (!ft_read_into_buffer(&global_buffer, fd))
+		return (ft_free_buffers(&global_buffer, NULL));
+	str = ft_extract_line(&global_buffer);
+	return (str);
 }
