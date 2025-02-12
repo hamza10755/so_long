@@ -6,11 +6,9 @@
 /*   By: hamzabillah <hamzabillah@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 13:12:05 by hbelaih           #+#    #+#             */
-/*   Updated: 2025/02/12 23:04:18 by hamzabillah      ###   ########.fr       */
+/*   Updated: 2025/02/12 23:19:12 by hamzabillah      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "so_long.h"
 
 #include "so_long.h"
 
